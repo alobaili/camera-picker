@@ -1,3 +1,5 @@
 # CameraPicker
 
-A description of this package.
+A camera picker for SwiftUI.
+
+Still under development.
