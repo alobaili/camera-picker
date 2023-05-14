@@ -39,7 +39,7 @@ public struct CameraPicker<Label>: View where Label: View {
                     }
                 }
             } else {
-                UIImagePickerControllerRepresentation(error: $imagePickerControllerError)
+                UIImagePickerControllerRepresentation(selection: $selection, error: $imagePickerControllerError)
                     .ignoresSafeArea()
             }
         }

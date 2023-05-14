@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
+    @Binding var selection: [CameraPickerItem]
     @Binding var error: LocalizedError?
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = context.coordinator
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) == false {
             error = ImagePickerControllerError.cameraUnavailable
@@ -26,6 +28,8 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 
         // TODO: See if it makes sense to use cameraOverlayView either above system UI or replacing it.
 
+        // TODO: Handle allowsEditing.
+
         return imagePickerController
     }
 
@@ -39,11 +43,22 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 }
 
 extension UIImagePickerControllerRepresentation {
-    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         let parent: UIImagePickerControllerRepresentation
 
         init(parent: UIImagePickerControllerRepresentation) {
             self.parent = parent
+        }
+
+        func imagePickerController(
+            _ picker: UIImagePickerController,
+            didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+        ) {
+            // TODO: Handle movies.
+            // TODO: Handle edited images.
+            let originalImage = info[.originalImage] as! UIImage
+            parent.selection = [.image(Image(uiImage: originalImage))]
+            picker.dismiss(animated: true)
         }
     }
 }
