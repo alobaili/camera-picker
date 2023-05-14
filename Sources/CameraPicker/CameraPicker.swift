@@ -11,6 +11,7 @@ import AVFoundation
 public struct CameraPicker<Label>: View where Label: View {
     let label: Label
     @Binding var selection: [CameraPickerItem]
+    @State private var imagePickerControllerError: LocalizedError?
 
     @State private var showingCamera = false
 
@@ -29,10 +30,17 @@ public struct CameraPicker<Label>: View where Label: View {
             label
         }
         .fullScreenCover(isPresented: $showingCamera) {
-            Text("Camera Here")
+            if let imagePickerControllerError {
+                VStack {
+                    Text(imagePickerControllerError.localizedDescription)
 
-            Button("Close") {
-                showingCamera = false
+                    Button("Close") {
+                        showingCamera = false
+                    }
+                }
+            } else {
+                UIImagePickerControllerRepresentation(error: $imagePickerControllerError)
+                    .ignoresSafeArea()
             }
         }
     }
