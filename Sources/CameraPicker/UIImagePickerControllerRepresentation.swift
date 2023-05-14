@@ -26,7 +26,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
             imagePickerController.mediaTypes = availableMediaTypes
         }
 
-        // TODO: See if it makes sense to use cameraOverlayView either above system UI or replacing it.
+        // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
         // TODO: Handle allowsEditing.
 
