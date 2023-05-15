@@ -11,6 +11,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     @Binding var selection: [CameraPickerItem]
     @Binding var error: LocalizedError?
     let allowsEditing: Bool
+    let videoQuality: UIImagePickerController.QualityType
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -27,9 +28,9 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
             imagePickerController.mediaTypes = availableMediaTypes
         }
 
-        // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
-
         imagePickerController.allowsEditing = allowsEditing
+
+        // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
         return imagePickerController
     }
