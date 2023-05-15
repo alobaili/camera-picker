@@ -15,12 +15,16 @@ public struct CameraPicker<Label>: View where Label: View {
 
     @State private var showingCamera = false
 
+    let allowesEditing: Bool
+
     public init(
         selection: Binding<[CameraPickerItem]>,
+        allowsEditing: Bool = false,
         @ViewBuilder label: () -> Label
     ) {
         _selection = selection
         self.label = label()
+        self.allowesEditing = allowsEditing
     }
 
     public var body: some View {
@@ -39,8 +43,12 @@ public struct CameraPicker<Label>: View where Label: View {
                     }
                 }
             } else {
-                UIImagePickerControllerRepresentation(selection: $selection, error: $imagePickerControllerError)
-                    .ignoresSafeArea()
+                UIImagePickerControllerRepresentation(
+                    selection: $selection,
+                    error: $imagePickerControllerError,
+                    allowsEditing: allowesEditing
+                )
+                .ignoresSafeArea()
             }
         }
     }

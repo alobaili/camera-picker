@@ -10,6 +10,7 @@ import SwiftUI
 struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     @Binding var selection: [CameraPickerItem]
     @Binding var error: LocalizedError?
+    let allowsEditing: Bool
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -28,7 +29,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
-        // TODO: Handle allowsEditing.
+        imagePickerController.allowsEditing = allowsEditing
 
         return imagePickerController
     }
@@ -55,7 +56,13 @@ extension UIImagePickerControllerRepresentation {
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
         ) {
             // TODO: Handle movies.
-            // TODO: Handle edited images.
+
+            if let editedImage = info[.editedImage] as? UIImage {
+                parent.selection = [.image(Image(uiImage: editedImage))]
+                picker.dismiss(animated: true)
+                return
+            }
+
             let originalImage = info[.originalImage] as! UIImage
             parent.selection = [.image(Image(uiImage: originalImage))]
             picker.dismiss(animated: true)
