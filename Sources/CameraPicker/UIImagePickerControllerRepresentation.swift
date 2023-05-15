@@ -60,6 +60,10 @@ extension UIImagePickerControllerRepresentation {
             parent.selection = [.image(Image(uiImage: originalImage))]
             picker.dismiss(animated: true)
         }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true)
+        }
     }
 }
 
