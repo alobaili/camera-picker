@@ -16,18 +16,18 @@ public struct CameraPicker<Label>: View where Label: View {
     @State private var showingCamera = false
 
     let allowesEditing: Bool
-    let videoQuality: UIImagePickerController.QualityType
+    let preferredMediaTypes: Set<CameraPickerMediaType>
 
     public init(
         selection: Binding<[CameraPickerItem]>,
         allowsEditing: Bool = false,
-        videoQuality: UIImagePickerController.QualityType = .typeMedium,
+        preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         @ViewBuilder label: () -> Label
     ) {
         _selection = selection
         self.label = label()
         self.allowesEditing = allowsEditing
-        self.videoQuality = videoQuality
+        self.preferredMediaTypes = preferredMediaTypes
     }
 
     public var body: some View {
@@ -50,7 +50,7 @@ public struct CameraPicker<Label>: View where Label: View {
                     selection: $selection,
                     error: $imagePickerControllerError,
                     allowsEditing: allowesEditing,
-                    videoQuality: videoQuality
+                    preferredMediaTypes: preferredMediaTypes
                 )
                 .ignoresSafeArea()
             }

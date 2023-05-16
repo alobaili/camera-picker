@@ -6,12 +6,32 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
+
+public enum CameraPickerMediaType: Hashable {
+    case image
+    case movie(
+        quality: UIImagePickerController.QualityType = .typeMedium,
+        maximumDuration: TimeInterval = 600
+    )
+
+    fileprivate var utTypeIdentifier: String {
+        switch self {
+            case .image: return UTType.image.identifier
+            case .movie: return UTType.movie.identifier
+        }
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.utTypeIdentifier)
+    }
+}
 
 struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     @Binding var selection: [CameraPickerItem]
     @Binding var error: LocalizedError?
     let allowsEditing: Bool
-    let videoQuality: UIImagePickerController.QualityType
+    let preferredMediaTypes: Set<CameraPickerMediaType>
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -23,12 +43,19 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 
         imagePickerController.sourceType = .camera
 
-        // TODO: Check if movie is available and handle that case appropriately.
         if let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) {
-            imagePickerController.mediaTypes = availableMediaTypes
+            let availableMediaTypesSet = Set(availableMediaTypes)
+            let preferredMediaTypesSet = Set(preferredMediaTypes.map(\.utTypeIdentifier))
+            let intersection = availableMediaTypesSet.intersection(preferredMediaTypesSet)
+            imagePickerController.mediaTypes = Array(intersection)
         }
 
-        imagePickerController.allowsEditing = allowsEditing
+        for case .movie(let quality, let maximumDuration) in preferredMediaTypes {
+            imagePickerController.videoQuality = quality
+            imagePickerController.videoMaximumDuration = maximumDuration
+        }
+
+        imagePickerController.allowsEditing = false
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
