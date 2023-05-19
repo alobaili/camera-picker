@@ -33,6 +33,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     let allowsEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
     let cameraDevice: UIImagePickerController.CameraDevice
+    let captureMode: UIImagePickerController.CameraCaptureMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -58,6 +59,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 
         imagePickerController.allowsEditing = false
         imagePickerController.cameraDevice = cameraDevice
+        imagePickerController.cameraCaptureMode = captureMode
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
