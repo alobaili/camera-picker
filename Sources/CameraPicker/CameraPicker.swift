@@ -8,6 +8,12 @@
 import SwiftUI
 import AVFoundation
 
+public extension CameraPicker {
+    typealias Device = UIImagePickerController.CameraDevice
+    typealias CaptureMode = UIImagePickerController.CameraCaptureMode
+    typealias FlashMode = UIImagePickerController.CameraFlashMode
+}
+
 public struct CameraPicker<Label>: View where Label: View {
     let label: Label
     @Binding var selection: [CameraPickerItem]
@@ -16,17 +22,17 @@ public struct CameraPicker<Label>: View where Label: View {
 
     let allowesEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
-    let cameraDevice: UIImagePickerController.CameraDevice
-    let captureMode: UIImagePickerController.CameraCaptureMode
-    let flashMode: UIImagePickerController.CameraFlashMode
+    let cameraDevice: Device
+    let captureMode: CaptureMode
+    let flashMode: FlashMode
 
     public init(
         selection: Binding<[CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto,
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto,
         @ViewBuilder label: () -> Label
     ) {
         _selection = selection
@@ -92,9 +98,9 @@ extension CameraPicker {
         selection: Binding<CameraPickerItem?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto,
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto,
         @ViewBuilder label: () -> Label
     ) {
         self.init(
@@ -115,9 +121,9 @@ extension CameraPicker where Label == Text {
         selection: Binding<CameraPickerItem?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto
     ) {
         self.init(
             selection: selection,
@@ -136,9 +142,9 @@ extension CameraPicker where Label == Text {
         selection: Binding<CameraPickerItem?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto
     ) where S: StringProtocol {
         self.init(
             selection: selection,
@@ -157,9 +163,9 @@ extension CameraPicker where Label == Text {
         selection: Binding<[CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto
     ) {
         self.init(
             selection: selection,
@@ -178,9 +184,9 @@ extension CameraPicker where Label == Text {
         selection: Binding<[CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
-        cameraDevice: UIImagePickerController.CameraDevice = .rear,
-        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
-        flashMode: UIImagePickerController.CameraFlashMode = .auto
+        cameraDevice: Device = .rear,
+        captureMode: CaptureMode = .photo,
+        flashMode: FlashMode = .auto
     ) where S: StringProtocol {
         self.init(
             selection: selection,
