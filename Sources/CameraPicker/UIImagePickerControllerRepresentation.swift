@@ -34,6 +34,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     let preferredMediaTypes: Set<CameraPickerMediaType>
     let cameraDevice: UIImagePickerController.CameraDevice
     let captureMode: UIImagePickerController.CameraCaptureMode
+    let flashMode: UIImagePickerController.CameraFlashMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -60,6 +61,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
         imagePickerController.allowsEditing = false
         imagePickerController.cameraDevice = cameraDevice
         imagePickerController.cameraCaptureMode = captureMode
+        imagePickerController.cameraFlashMode = flashMode
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
