@@ -70,6 +70,34 @@ public struct CameraPicker<Label>: View where Label: View {
     }
 }
 
+extension CameraPicker {
+    public init(
+        selection: Binding<CameraPickerItem?>,
+        allowsEditing: Bool = false,
+        preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
+        cameraDevice: UIImagePickerController.CameraDevice = .rear,
+        captureMode: UIImagePickerController.CameraCaptureMode = .photo,
+        flashMode: UIImagePickerController.CameraFlashMode = .auto,
+        @ViewBuilder label: () -> Label
+    ) {
+        let binding = Binding<[CameraPickerItem]> {
+            if let item = selection.wrappedValue {
+                return [item]
+            } else {
+                return []
+            }
+        } set: { newItems in
+            if let item = newItems.first {
+                selection.wrappedValue = item
+            } else {
+                selection.wrappedValue = nil
+            }
+        }
+
+        self.init(selection: binding, allowsEditing: allowsEditing, preferredMediaTypes: preferredMediaTypes, cameraDevice: cameraDevice, captureMode: captureMode, flashMode: flashMode, label: label)
+    }
+}
+
 struct CameraPicker_Previews: PreviewProvider {
     static var previews: some View {
         CameraPicker(selection: .constant([])) {
