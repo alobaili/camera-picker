@@ -23,7 +23,7 @@ public enum CameraPickerMediaType: Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.utTypeIdentifier)
+        hasher.combine(utTypeIdentifier)
     }
 }
 
@@ -32,6 +32,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     @Binding var error: LocalizedError?
     let allowsEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
+    let cameraDevice: UIImagePickerController.CameraDevice
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePickerController = UIImagePickerController()
@@ -56,6 +57,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
         }
 
         imagePickerController.allowsEditing = false
+        imagePickerController.cameraDevice = cameraDevice
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
 
