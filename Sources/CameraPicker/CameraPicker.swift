@@ -16,7 +16,7 @@ public extension CameraPicker {
 
 public struct CameraPicker<Label>: View where Label: View {
     let label: Label
-    @Binding var selection: [CameraPickerItem]
+    @Binding var selection: [any CameraPickerItem]
     @State private var imagePickerControllerError: LocalizedError?
     @State private var showingCamera = false
 
@@ -27,7 +27,7 @@ public struct CameraPicker<Label>: View where Label: View {
     let flashMode: FlashMode
 
     public init(
-        selection: Binding<[CameraPickerItem]>,
+        selection: Binding<[any CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
@@ -77,9 +77,9 @@ public struct CameraPicker<Label>: View where Label: View {
 
 extension CameraPicker {
     private static func arrayBindingFrom(
-        optionalBinding: Binding<CameraPickerItem?>
-    ) -> Binding<[CameraPickerItem]> {
-        Binding<[CameraPickerItem]> {
+        optionalBinding: Binding<(any CameraPickerItem)?>
+    ) -> Binding<[any CameraPickerItem]> {
+        Binding<[any CameraPickerItem]> {
             if let item = optionalBinding.wrappedValue {
                 return [item]
             } else {
@@ -95,7 +95,7 @@ extension CameraPicker {
     }
 
     public init(
-        selection: Binding<CameraPickerItem?>,
+        selection: Binding<(any CameraPickerItem)?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
@@ -118,7 +118,7 @@ extension CameraPicker {
 extension CameraPicker where Label == Text {
     public init(
         _ titleKey: LocalizedStringKey,
-        selection: Binding<CameraPickerItem?>,
+        selection: Binding<(any CameraPickerItem)?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
@@ -139,7 +139,7 @@ extension CameraPicker where Label == Text {
 
     public init<S>(
         _ title: S,
-        selection: Binding<CameraPickerItem?>,
+        selection: Binding<(any CameraPickerItem)?>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
@@ -160,7 +160,7 @@ extension CameraPicker where Label == Text {
 
     public init(
         _ titleKey: LocalizedStringKey,
-        selection: Binding<[CameraPickerItem]>,
+        selection: Binding<[any CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
@@ -181,7 +181,7 @@ extension CameraPicker where Label == Text {
 
     public init<S>(
         _ title: S,
-        selection: Binding<[CameraPickerItem]>,
+        selection: Binding<[any CameraPickerItem]>,
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,

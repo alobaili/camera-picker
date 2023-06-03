@@ -28,7 +28,7 @@ public enum CameraPickerMediaType: Hashable {
 }
 
 struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
-    @Binding var selection: [CameraPickerItem]
+    @Binding var selection: [any CameraPickerItem]
     @Binding var error: LocalizedError?
     let allowsEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
@@ -92,13 +92,20 @@ extension UIImagePickerControllerRepresentation {
             // TODO: Handle movies.
 
             if let editedImage = info[.editedImage] as? UIImage {
-                parent.selection = [.image(Image(uiImage: editedImage))]
+                let image = Image(uiImage: editedImage)
+                let imageCameraPickerItem = ImageCameraPickerItem(
+                    mediaType: image,
+                    underlyingMediaType: editedImage
+                )
+                parent.selection = [imageCameraPickerItem]
                 picker.dismiss(animated: true)
                 return
             }
 
             let originalImage = info[.originalImage] as! UIImage
-            parent.selection = [.image(Image(uiImage: originalImage))]
+            let image = Image(uiImage: originalImage)
+            let imageCameraPickerItem = ImageCameraPickerItem(mediaType: image, underlyingMediaType: originalImage)
+            parent.selection = [imageCameraPickerItem]
             picker.dismiss(animated: true)
         }
 
