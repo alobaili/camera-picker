@@ -8,13 +8,22 @@
 import SwiftUI
 import AVFoundation
 
-public enum CameraPickerItem {
-    case image(Image)
-    case video(AVPlayer)
+public protocol CameraPickerItem: Identifiable where ID == UUID {
+    associatedtype MediaType
+
+    var mediaType: MediaType { get }
+    var id: Self.ID { get }
+
+    func save() async throws
 }
 
-extension CameraPickerItem: Identifiable {
-    public var id: UUID {
-        UUID()
+public struct ImageCameraPickerItem: CameraPickerItem {
+    public let id = UUID()
+    public var mediaType: Image
+    var underlyingMediaType: UIImage
+
+    public func save() async throws {
+        let mediaSaver = MediaSaver()
+        try await mediaSaver.save(underlyingMediaType)
     }
 }
