@@ -58,7 +58,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
             imagePickerController.videoMaximumDuration = maximumDuration
         }
 
-        imagePickerController.allowsEditing = false
+        imagePickerController.allowsEditing = allowsEditing
         imagePickerController.cameraDevice = cameraDevice
         imagePickerController.cameraCaptureMode = captureMode
         imagePickerController.cameraFlashMode = flashMode
