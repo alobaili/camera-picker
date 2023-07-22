@@ -17,7 +17,7 @@ import AVKit
 import CameraPicker
 
 struct ContentView: View {
-    @State private var pickedItems: [CameraPickerItem] = []
+    @State private var pickedItems: [any CameraPickerItem] = []
     
     var body: some View {
         VStack {
@@ -27,12 +27,12 @@ struct ContentView: View {
 
             ForEach(pickedItems) { item in
                 switch item {
-                    case .image(let image):
-                        image
+                    case let item as ImageCameraPickerItem:
+                        item.mediaType
                             .resizable()
                             .scaledToFit()
-                    case .video(let player):
-                        VideoPlayer(player: player)
+                    default:
+                        EmptyView() // Video Camera Picker Items is still a TODO.
                 }
             }
             .frame(width: 100, height: 100)
