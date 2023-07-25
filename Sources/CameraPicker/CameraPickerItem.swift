@@ -27,3 +27,14 @@ public struct ImageCameraPickerItem: CameraPickerItem {
         try await mediaSaver.save(underlyingMediaType)
     }
 }
+
+public struct MovieCameraPickerItem: CameraPickerItem {
+    public let id = UUID()
+    public var mediaType: AVPlayer
+    var underlyingMediaType: URL
+
+    public func save() async throws {
+        let mediaSaver = MediaSaver()
+        try await mediaSaver.saveMovie(at: underlyingMediaType)
+    }
+}

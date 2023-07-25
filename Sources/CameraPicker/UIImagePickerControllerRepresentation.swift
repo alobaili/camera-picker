@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 import UniformTypeIdentifiers
 
 public enum CameraPickerMediaType: Hashable {
@@ -89,23 +90,40 @@ extension UIImagePickerControllerRepresentation {
             _ picker: UIImagePickerController,
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
         ) {
-            // TODO: Handle movies.
-
-            if let editedImage = info[.editedImage] as? UIImage {
-                let image = Image(uiImage: editedImage)
-                let imageCameraPickerItem = ImageCameraPickerItem(
-                    mediaType: image,
-                    underlyingMediaType: editedImage
-                )
-                parent.selection = [imageCameraPickerItem]
-                picker.dismiss(animated: true)
+            guard
+                let mediaTypeString = info[.mediaType] as? String,
+                let mediaType = UTType(mediaTypeString)
+            else {
                 return
             }
 
-            let originalImage = info[.originalImage] as! UIImage
-            let image = Image(uiImage: originalImage)
-            let imageCameraPickerItem = ImageCameraPickerItem(mediaType: image, underlyingMediaType: originalImage)
-            parent.selection = [imageCameraPickerItem]
+            if mediaType == .image {
+                let editedImage = info[.editedImage] as? UIImage
+                let originalImage = info[.originalImage] as? UIImage
+
+                if let imageToHandle = editedImage ?? originalImage {
+                    let image = Image(uiImage: imageToHandle)
+                    let imageCameraPickerItem = ImageCameraPickerItem(
+                        mediaType: image,
+                        underlyingMediaType: imageToHandle
+                    )
+
+                    parent.selection = [imageCameraPickerItem]
+                }
+            } else if mediaType == .movie {
+                if let movieURL = info[.mediaURL] as? URL {
+                    let player = AVPlayer(url: movieURL)
+
+                    let movieCameraPickerItem = MovieCameraPickerItem(
+                        mediaType: player,
+                        underlyingMediaType: movieURL
+                    )
+
+                    parent.selection = [movieCameraPickerItem]
+                }
+            }
+
+
             picker.dismiss(animated: true)
         }
 
