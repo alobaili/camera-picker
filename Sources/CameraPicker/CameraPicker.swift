@@ -23,7 +23,7 @@ public struct CameraPicker<Label>: View where Label: View {
     let allowesEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
     let cameraDevice: Device
-    let captureMode: CaptureMode
+    let preferredCaptureMode: CaptureMode
     let flashMode: FlashMode
 
     public init(
@@ -31,7 +31,7 @@ public struct CameraPicker<Label>: View where Label: View {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto,
         @ViewBuilder label: () -> Label
     ) {
@@ -40,7 +40,7 @@ public struct CameraPicker<Label>: View where Label: View {
         self.allowesEditing = allowsEditing
         self.preferredMediaTypes = preferredMediaTypes
         self.cameraDevice = cameraDevice
-        self.captureMode = captureMode
+        self.preferredCaptureMode = preferredCaptureMode
         self.flashMode = flashMode
     }
 
@@ -66,7 +66,7 @@ public struct CameraPicker<Label>: View where Label: View {
                     allowsEditing: allowesEditing,
                     preferredMediaTypes: preferredMediaTypes,
                     cameraDevice: cameraDevice,
-                    captureMode: captureMode,
+                    preferredCaptureMode: preferredCaptureMode,
                     flashMode: flashMode
                 )
                 .ignoresSafeArea()
@@ -99,7 +99,7 @@ extension CameraPicker {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto,
         @ViewBuilder label: () -> Label
     ) {
@@ -108,7 +108,7 @@ extension CameraPicker {
             allowsEditing: allowsEditing,
             preferredMediaTypes: preferredMediaTypes,
             cameraDevice: cameraDevice,
-            captureMode: captureMode,
+            preferredCaptureMode: preferredCaptureMode,
             flashMode: flashMode,
             label: label
         )
@@ -122,7 +122,7 @@ extension CameraPicker where Label == Text {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto
     ) {
         self.init(
@@ -130,7 +130,7 @@ extension CameraPicker where Label == Text {
             allowsEditing: allowsEditing,
             preferredMediaTypes: preferredMediaTypes,
             cameraDevice: cameraDevice,
-            captureMode: captureMode,
+            preferredCaptureMode: preferredCaptureMode,
             flashMode: flashMode
         ) {
             Text(titleKey)
@@ -143,7 +143,7 @@ extension CameraPicker where Label == Text {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto
     ) where S: StringProtocol {
         self.init(
@@ -151,7 +151,7 @@ extension CameraPicker where Label == Text {
             allowsEditing: allowsEditing,
             preferredMediaTypes: preferredMediaTypes,
             cameraDevice: cameraDevice,
-            captureMode: captureMode,
+            preferredCaptureMode: preferredCaptureMode,
             flashMode: flashMode
         ) {
             Text(title)
@@ -164,7 +164,7 @@ extension CameraPicker where Label == Text {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto
     ) {
         self.init(
@@ -172,7 +172,7 @@ extension CameraPicker where Label == Text {
             allowsEditing: allowsEditing,
             preferredMediaTypes: preferredMediaTypes,
             cameraDevice: cameraDevice,
-            captureMode: captureMode,
+            preferredCaptureMode: preferredCaptureMode,
             flashMode: flashMode
         ) {
             Text(titleKey)
@@ -185,7 +185,7 @@ extension CameraPicker where Label == Text {
         allowsEditing: Bool = false,
         preferredMediaTypes: Set<CameraPickerMediaType> = [.image],
         cameraDevice: Device = .rear,
-        captureMode: CaptureMode = .photo,
+        preferredCaptureMode: CaptureMode = .photo,
         flashMode: FlashMode = .auto
     ) where S: StringProtocol {
         self.init(
@@ -193,7 +193,7 @@ extension CameraPicker where Label == Text {
             allowsEditing: allowsEditing,
             preferredMediaTypes: preferredMediaTypes,
             cameraDevice: cameraDevice,
-            captureMode: captureMode,
+            preferredCaptureMode: preferredCaptureMode,
             flashMode: flashMode
         ) {
             Text(title)

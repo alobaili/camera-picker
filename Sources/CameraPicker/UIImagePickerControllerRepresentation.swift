@@ -34,7 +34,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     let allowsEditing: Bool
     let preferredMediaTypes: Set<CameraPickerMediaType>
     let cameraDevice: UIImagePickerController.CameraDevice
-    let captureMode: UIImagePickerController.CameraCaptureMode
+    let preferredCaptureMode: UIImagePickerController.CameraCaptureMode
     let flashMode: UIImagePickerController.CameraFlashMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -61,7 +61,26 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
 
         imagePickerController.allowsEditing = allowsEditing
         imagePickerController.cameraDevice = cameraDevice
-        imagePickerController.cameraCaptureMode = captureMode
+
+        if let availableCaptureModes =  UIImagePickerController.availableCaptureModes(for: cameraDevice) {
+            let availableCaptureModesSet = Set(availableCaptureModes)
+            let preferredCaptureModesSet = Set([preferredCaptureMode.rawValue as NSNumber])
+            let intersection = availableCaptureModesSet.intersection(preferredCaptureModesSet)
+
+            let mediaTypes = imagePickerController.mediaTypes
+            if mediaTypes == [CameraPickerMediaType.movie().utTypeIdentifier] {
+                imagePickerController.cameraCaptureMode = .video
+            } else if mediaTypes == [CameraPickerMediaType.image.utTypeIdentifier] {
+                imagePickerController.cameraCaptureMode = .photo
+            } else {
+                if let resolvedCameraCaptureModeRawValue = intersection.first as? Int {
+                    let resolvedCameraCaptureMode: UIImagePickerController.CameraCaptureMode?
+                    resolvedCameraCaptureMode = .init(rawValue: resolvedCameraCaptureModeRawValue)
+                    imagePickerController.cameraCaptureMode = resolvedCameraCaptureMode ?? .photo
+                }
+            }
+        }
+
         imagePickerController.cameraFlashMode = flashMode
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
