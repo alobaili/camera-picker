@@ -27,7 +27,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            CameraPicker("Capture an Image", selection: $pickedItem, preferredMediaTypes: [.image, .movie()])
+            CameraPicker(
+                "Capture an Image",
+                selection: $pickedItem,
+                preferredMediaTypes: [.image, .movie()]
+            )
 
             switch pickedItem {
                 case let pickedItem as ImageCameraPickerItem:
