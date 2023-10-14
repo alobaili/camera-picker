@@ -28,6 +28,50 @@ public enum CameraPickerMediaType: Hashable {
     }
 }
 
+// TODO: Move this to a separate file.
+class MyImagePickerController: UIImagePickerController {
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
+        let camPreviewView = children[0].children[0].children[0].view!
+        camPreviewView.translatesAutoresizingMaskIntoConstraints = false
+        camPreviewView.contentMode = .scaleAspectFit
+
+        NSLayoutConstraint.activate([
+            camPreviewView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            camPreviewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            camPreviewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            camPreviewView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1.33)
+        ])
+    }
+}
+
+// TODO: Move this to a separate file.
+struct CameraOverlayView: View {
+    let action: () -> Void
+
+    var body: some View {
+        VStack {
+            Spacer()
+
+            Button(action: action) {
+                Circle()
+                    .foregroundColor(.white)
+                    .frame(width: 88, height: 88)
+            }
+            .padding(4)
+            .background(
+                Circle()
+                    .stroke(lineWidth: 4)
+            )
+        }
+    }
+}
+
+#Preview {
+    CameraOverlayView(action: {})
+}
+
 struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     @Binding var selection: [any CameraPickerItem]
     @Binding var error: LocalizedError?
@@ -38,7 +82,7 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
     let flashMode: UIImagePickerController.CameraFlashMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
-        let imagePickerController = UIImagePickerController()
+        let imagePickerController = MyImagePickerController()
         imagePickerController.delegate = context.coordinator
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) == false {
@@ -84,6 +128,21 @@ struct UIImagePickerControllerRepresentation: UIViewControllerRepresentable {
         imagePickerController.cameraFlashMode = flashMode
 
         // TODO: Use cameraOverlayView and set showsCameraControls to false to add the ability to take multiple images.
+        imagePickerController.showsCameraControls = false
+
+        let cameraOverlayView = CameraOverlayView {
+            imagePickerController.takePicture()
+        }
+
+        let hostingController = UIHostingController(rootView: cameraOverlayView)
+        let hostingControllerView = hostingController.view!
+        hostingControllerView.backgroundColor = .clear
+
+        // This hardcoding of the frame presents a UI bug where the overlay is
+        // displayed behind the iOS Home indicator.
+        // TODO: Use Auto Layout instead.
+        hostingControllerView.frame = (imagePickerController.cameraOverlayView?.frame)!
+        imagePickerController.cameraOverlayView = hostingControllerView
 
         return imagePickerController
     }
